@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Verificar si se proporcionaron los argumentos adecuados
+if [ $# -ne 2 ]; then
+    echo "Uso: $0 <URL> <wordlist_path>"
+    exit 1
+fi
+
+# Banner ASCII en color amarillo y cyan
+yellow="\033[1;33m"
+cyan="\033[1;36m"
+reset="\033[0m"
+
+echo -e "${yellow}"
+cat << "EOF"
+$$$$$$$\            $$\               $$$$$$$\                        $$\                         
+$$  __$$\           $$ |              $$  __$$\                       $$ |                        
+$$ /  \__|$$\   $$\ $$$$$$$\          $$ |  $$ | $$$$$$\  $$\   $$\ $$$$$$\    $$$$$$\   $$$$$$\  
+\$$$$$$\  $$ |  $$ |$$  __$$\ $$$$$$\ $$$$$$$\ |$$  __$$\ $$ |  $$ |\_$$  _|  $$  __$$\ $$  __$$\ 
+ \____$$\ $$ |  $$ |$$ |  $$ |\______|$$  __$$\ $$ |  \__|$$ |  $$ |  $$ |    $$$$$$$$ |$$ |  \__|
+$$\   $$ |$$ |  $$ |$$ |  $$ |        $$ |  $$ |$$ |      $$ |  $$ |  $$ |$$\ $$   ____|$$ |      
+\$$$$$$  |\$$$$$$  |$$$$$$$  |        $$$$$$$  |$$ |      \$$$$$$  |  \$$$$  |\$$$$$$$\ $$ |      
+ \______/  \______/ \_______/         \_______/ \__|       \______/    \____/  \_______|\__|      
+EOF
+echo -e "${reset}"
+
+# Asignar los argumentos a variables
+url="$1"
+wordlist_path="$2"
+
+# Colores
+blue="\033[1;34m"
+red="\033[1;31m"
+green="\033[1;32m"
+reset="\033[0m"
+
+
+echo -ne "\n\t\t\t [\e[1;36m*\e[0m] Devloped From @\e[1;31mDkb4rb\e[0m - \e[1;31mJuan Duque\e[0m \n"
+
+
+# Leer el archivo wordlist y realizar las solicitudes
+while IFS= read -r line; do
+    response=$(curl -I "$url" -H "Host: ${line}.d3f3ndr1x.corp" 2>/dev/null)
+    if [[ $response == *"HTTP/1.1 200 OK"* ]]; then
+        echo -e "${green}Respuesta 200 para:${reset} ${red}${line}.d3f3ndr1x.corp${reset}"
+        echo -e "$response"
+    fi
+done < "$wordlist_path"
+
